@@ -222,8 +222,9 @@ Game.handleInput = function(inputType, inputData) {
             var dir = ROT.DIRS[8][Game.keyMap[inputData.keyCode]];
             Game.movePlayer(dir[0], dir[1]);
         } else if (inputData.keyCode === ROT.KEYS.VK_X) {
-            // banish!
-            Game.player.banish(Game.visibleEntities);
+            // banish! if nothing done, don't spend a turn
+            if (!Game.player.banish(Game.visibleEntities))
+                return;
         } else if (inputData.keyCode === ROT.KEYS.VK_I) {
             Game.currentDialog = new Game.Dialog.Items(Game.Dialog.invProp, Game.player._items);
             Game.currentDialog.show();

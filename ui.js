@@ -20,21 +20,24 @@ Game.UI.Status = {
 
     getStatus: function() {
         var player = Game.player;
-        //var output = "<span style='color:orange'>" + Game.player._name + "</span>";
+        var output = "";
+        //output = "<span style='color:orange'>" + Game.player._name + "</span>";
         //output += "<br />";
-        var output = "Level: " + player._level;
-        output += "<br />";
-        output +=" XP: " + player._xp;
-        output += " / " + player.getNextLevelExperience();
-        output += "<br />";
+        //output = "Level: " + player._level;
+        //output += "<br />";
+        //output +=" XP: " + player._xp;
+        //output += " / " + player.getNextLevelExperience();
+        //output += "<br />";
         if (player._hp < (player._maxHP * 0.25))
             output += "HP: <span style='color:red'>" + player._hp + "</span> / " + player._maxHP;
         else
             output += "HP: " + player._hp + " / " + player._maxHP;
         output += "<br />";
-        output += "Attack: " + player.getAttackValue();
-        output += "<br />";
+        //output += "Attack: " + player.getAttackValue();
+        //output += "<br />";
         output += "Defense: " + player.getDefenseValue();
+        output += "<br />";
+        output += "Cooldown: " + player._banishCooldown;
         output += "<br />";
         output += "Turns: " + Game.turns;
         output += "<br />";

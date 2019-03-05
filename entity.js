@@ -211,9 +211,10 @@ Game.EntityMixins.PlayerActor = {
             Game.lostGame();
         }
 
-        // always true since player... necessary?
         if (this.hasMixin(Game.EntityMixins.Effectable))
             this.elapseEffects();
+        if (this.hasMixin(Game.EntityMixins.Banisher))
+            this.elapseBanishCooldown();
         
         Game.turns++;
         Game.refresh();
@@ -362,6 +363,8 @@ Game.EntityMixins.TaskActor = {
 
         if (this.hasMixin(Game.EntityMixins.Effectable))
             this.elapseEffects();
+        if (this.hasMixin(Game.EntityMixins.Banisher))
+            this.elapseBanishCooldown();
 
         for (var i = 0; i < this._tasks.length; i++) {
             if (this.canDoTask(this._tasks[i])) {
@@ -749,16 +752,32 @@ Game.EntityMixins.Banisher = {
     name: 'Banisher',
     groupName: 'Banisher',
     init: function(template) {
-        this._waitTime = 0;
+        this._banishCooldown = 0;
     },
     banish: function(entities) {
-        if (entities.length > 0) {
-            Game.UI.addMessage("You attempt to banish the beings around you...");
-            for (var i=0; i<entities.length; i++) {
-                entities[i].attemptRemoval(this);
-            }
-        } else {
+        if (entities.length < 1) {
             Game.UI.addMessage("There is nothing nearby to banish.");
+            return false;
+        }
+        if (this._banishCooldown > 0) {
+            Game.UI.addMessage("You cannot banish anything yet!");
+            return false;
+        }
+        Game.UI.addMessage("You attempt to banish the beings around you...");
+        for (var i=0; i<entities.length; i++) {
+            entities[i].attemptRemoval(this);
+        }
+        this.setBanishCooldown();
+        return true;
+    },
+    setBanishCooldown: function() {
+        this._banishCooldown = 4;
+    },
+    elapseBanishCooldown: function() {
+        if (this._banishCooldown > 0) {
+            this._banishCooldown--;
+        } else {
+            this._banishCooldown = 0;
         }
     }
 };
