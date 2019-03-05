@@ -272,7 +272,16 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
     
     pos = this.getEmptyRandomPosition();
     this._tiles[pos.x][pos.y] = Game.Tile.stairDown;
-    this._connections[pos.x+','+pos.y] = 'Cavern';
+    if (depth === 5)
+        this._connections[pos.x+','+pos.y] = 'Shrine';
+    else
+        this._connections[pos.x+','+pos.y] = 'Cavern';
+
+    for (var i=0; i<10; i++) {
+        var entity = Game.EntityRepository.createRandom();
+        this.addEntityAtRandomPosition(entity);
+    }
+    
 };
 
 extendObj(Game.Zone.Cavern, Game.Zone);
@@ -286,8 +295,8 @@ Game.Zone.Shrine = function Cavern(tiles, player) {
         born: [5],
         survive: [1, 2, 3]});
     map.randomize(0.5);
-    map.create(); map.create();
-    map.create(function(x, y, value) {
+    map.create(); map.create(); map.create();
+    map.connect(function(x, y, value) {
         if (value === 1) {
             this._tiles[x][y] = Game.Tile.caveWall;
         } else {

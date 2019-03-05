@@ -381,7 +381,7 @@ Game.EntityMixins.TaskActor = {
         }
     },
     wander: function() {
-        var moveOffset = ROT.DIRS[8].random();
+        var moveOffset = ROT.RNG.getItem(ROT.DIRS[8]);
         this.tryMove(this._x + moveOffset[0], this._y + moveOffset[1], this._zone);
     },
     hunt: function() {
@@ -474,14 +474,6 @@ Game.EntityMixins.Killable = {
             this.raiseEvent('onDeath', agent);
             agent.raiseEvent('onKill', this);
             this.kill(null, this._zone);
-            /*
-            if (this.hasMixin('PlayerActor')) {
-                // player has died
-                Game.UI.addMessage("You've died...");
-            } else if (agent.hasMixin('PlayerActor')) {
-                // player has killed entity
-            }
-            */
         }
     },
     getDefenseValue: function() {
@@ -492,6 +484,23 @@ Game.EntityMixins.Killable = {
             }
         }
         return def + this._defenseValue;
+    }
+};
+
+Game.EntityMixins.Banishable = {
+    name: 'Banishable',
+    init: function(template) {
+        this._protected = false || template['protected'];
+    },
+    attemptRemoval: function(agent) {
+        if (!this.isProtected()) {
+            this.raiseEvent('onRemoved', agent);
+            agent.raiseEvent('onBanished', this);
+            this.kill(null, this._zone);
+        }
+    },
+    isProtected: function() {
+        return this._protected;
     }
 };
 
@@ -736,6 +745,24 @@ Game.EntityMixins.Communicator = {
     }
 };
 
+Game.EntityMixins.Banisher = {
+    name: 'Banisher',
+    groupName: 'Banisher',
+    init: function(template) {
+        this._waitTime = 0;
+    },
+    banish: function(entities) {
+        if (entities.length > 0) {
+            Game.UI.addMessage("You attempt to banish the beings around you...");
+            for (var i=0; i<entities.length; i++) {
+                entities[i].attemptRemoval(this);
+            }
+        } else {
+            Game.UI.addMessage("There is nothing nearby to banish.");
+        }
+    }
+};
+
 // entities
 
 Game.PlayerTemplate = {
@@ -751,6 +778,7 @@ Game.PlayerTemplate = {
              Game.EntityMixins.Sight,
              Game.EntityMixins.Equipper,
              Game.EntityMixins.Killable,
+             Game.EntityMixins.Banisher,
              Game.EntityMixins.Attacker,
              Game.EntityMixins.Effectable,
              Game.EntityMixins.ExperienceGainer,
@@ -773,6 +801,7 @@ Game.EntityRepository.define('imp', {
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
              Game.EntityMixins.Killable,
+             Game.EntityMixins.Banishable,
              Game.EntityMixins.Attacker,
              Game.EntityMixins.CorpseDropper]
 });
@@ -790,5 +819,6 @@ Game.EntityRepository.define('ghost', {
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
              Game.EntityMixins.Killable,
+             Game.EntityMixins.Banishable,             
              Game.EntityMixins.Attacker]
 });

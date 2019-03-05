@@ -221,6 +221,9 @@ Game.handleInput = function(inputType, inputData) {
         if (inputData.keyCode in Game.keyMap) {
             var dir = ROT.DIRS[8][Game.keyMap[inputData.keyCode]];
             Game.movePlayer(dir[0], dir[1]);
+        } else if (inputData.keyCode === ROT.KEYS.VK_X) {
+            // banish!
+            Game.player.banish(Game.visibleEntities);
         } else if (inputData.keyCode === ROT.KEYS.VK_I) {
             Game.currentDialog = new Game.Dialog.Items(Game.Dialog.invProp, Game.player._items);
             Game.currentDialog.show();
