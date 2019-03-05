@@ -253,10 +253,12 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
     this._isMultiLevel = true;
     this._depth = depth;
 
-    var map = new ROT.Map.Cellular(this._width, this._height);
+    var map = new ROT.Map.Cellular(this._width, this._height, {
+        connected: true
+    });
     map.randomize(0.5);
-    map.create(); map.create();
-    map.create(function(x, y, value) {
+    map.create(); map.create(); map.create();
+    map.connect(function(x, y, value) {
         if (value === 1) {
             this._tiles[x][y] = Game.Tile.caveWall;
         } else {
