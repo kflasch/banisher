@@ -265,14 +265,12 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
     }.bind(this));
 
     var pos = this.getEmptyRandomPosition();
-    Game.player._x = pos.x;
-    Game.player._y = pos.y;
-    this.addEntity(Game.player);
-
-    pos = this.getEmptyRandomPosition();
     this._tiles[pos.x][pos.y] = Game.Tile.stairUp;
+    this._connections[pos.x+','+pos.y] = fromZoneID;
+    
     pos = this.getEmptyRandomPosition();
-    this._tiles[pos.x][pos.y] = Game.Tile.stairDown;    
+    this._tiles[pos.x][pos.y] = Game.Tile.stairDown;
+    this._connections[pos.x+','+pos.y] = 'Cavern';
 };
 
 extendObj(Game.Zone.Cavern, Game.Zone);

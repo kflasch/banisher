@@ -9,6 +9,12 @@ Game.World.prototype._init = function(player) {
     var zone = new Game.Zone.Cavern(this._getNewTiles(), -1, 1);
     this._zones.push(zone);
     zone._id = 0;
+
+    var ppos = zone.getEmptyRandomPosition();
+    Game.player._x = ppos.x;
+    Game.player._y = ppos.y;
+    zone.addEntity(Game.player);
+
 };
 
 Game.World.prototype._getNewTiles = function() {
@@ -35,12 +41,12 @@ Game.World.prototype.generateNewZone = function(name, fromZoneID) {
     if (name === this._zones[fromZoneID]._name) {
         newZoneDepth = this._zones[fromZoneID]._depth + 1;
     }
-    
+
     var newZone = new Game.Zone[name](this._getNewTiles(), fromZoneID, newZoneDepth);
     var newID = this._zones.push(newZone) - 1;
     newZone._id = newID;
 //    newZone.addConnection(x, y, Game.Tile.stairUp, fromZoneID);
-    return newID;    
+    return newID;
 };
 
 Game.World.prototype.exportToString = function() {

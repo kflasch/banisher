@@ -107,7 +107,7 @@ Game.Entity.prototype.changeZone = function() {
                 Game.UI.addMessage("You enter the " + this._zone._name.toLowerCase()
                                    + ", depth " + this._zone._depth + ".");
             else
-                Game.UI.addMessage("You enter the " + this._zone._name.toLowerCase() + ".");                
+                Game.UI.addMessage("You enter the " + this._zone._name.toLowerCase() + ".");
             return zoneVal;
         } else {
             var newZoneID = Game.world.generateNewZone(zoneVal, this._zone._id);
