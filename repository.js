@@ -48,9 +48,9 @@ Game.Repository.prototype.create = function(name, extraProperties) {
 Game.Repository.prototype.createRandom = function(zoneName) {
     // Pick a random key and create an object based off of it.
     if (zoneName !== undefined) {
-	return this.create(this._zoneRandomTemplates[zoneName].random());
+	return this.create(ROT.RNG.getItem(this._zoneRandomTemplates[zoneName]));
     } else {
-	return this.create(Object.keys(this._randomTemplates).random());
+	return this.create(ROT.RNG.getItem(Object.keys(this._randomTemplates)));
     }
 };
 
