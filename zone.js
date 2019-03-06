@@ -272,7 +272,7 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
     
     pos = this.getEmptyRandomPosition();
     this._tiles[pos.x][pos.y] = Game.Tile.stairDown;
-    if (depth === 5)
+    if (depth === 1)
         this._connections[pos.x+','+pos.y] = 'Shrine';
     else
         this._connections[pos.x+','+pos.y] = 'Cavern';
@@ -286,7 +286,7 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
 
 extendObj(Game.Zone.Cavern, Game.Zone);
 
-Game.Zone.Shrine = function Cavern(tiles, player) {
+Game.Zone.Shrine = function Shrine(tiles, fromZoneID, depth) {
     Game.Zone.call(this, tiles);
 
     this._name = "Shrine";
@@ -303,5 +303,12 @@ Game.Zone.Shrine = function Cavern(tiles, player) {
             this._tiles[x][y] = Game.Tile.caveFloor;
         }
     }.bind(this));
+
+    var pos = this.getEmptyRandomPosition();
+    this._tiles[pos.x][pos.y] = Game.Tile.stairUp;
+    this._connections[pos.x+','+pos.y] = fromZoneID;
+
+    this.addItemAtRandomPosition(Game.ItemRepository.create('starruby'));
+
 };
 extendObj(Game.Zone.Shrine, Game.Zone);

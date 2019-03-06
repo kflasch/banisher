@@ -89,8 +89,17 @@ Game.Entity.prototype.tryDoor = function(x, y, zone) {
 Game.Entity.prototype.changeZone = function() {
     var tile = this._zone.getTile(this._x, this._y);
     var key = this._x + ',' + this._y;
-    var zoneVal = this._zone._connections[key];
+    var zoneVal = this._zone._connections[key];    
     if (typeof zoneVal != 'undefined') {
+        // check win condition
+        if (zoneVal === -1) {
+            if (this.hasItem('starruby')) {            
+                Game.wonGame();
+            } else {
+                Game.UI.addMessage('You cannot leave without the Star Ruby!');
+            }
+            return undefined;
+        }
         if (this._zone._entities[key] == this) {
             delete this._zone._entities[key];
         } else {
@@ -112,6 +121,8 @@ Game.Entity.prototype.changeZone = function() {
         } else {
             var newZoneID = Game.world.generateNewZone(zoneVal, this._zone._id);
             this._zone._connections[key] = newZoneID;
+//            console.log(newZoneID);
+//            console.log(Game.world._zones[newZoneID]);
             var entranceKeyNew = Game.world._zones[newZoneID].getConnectionForZone(this._zone._id);
             var oldX = this._x;
             var oldY = this._y;
@@ -771,7 +782,10 @@ Game.EntityMixins.Banisher = {
         return true;
     },
     setBanishCooldown: function() {
-        this._banishCooldown = 4;
+        if (this.hasItem('starruby'))
+            this._banishCooldown = 0;
+        else
+            this._banishCooldown = 5;
     },
     elapseBanishCooldown: function() {
         if (this._banishCooldown > 0) {

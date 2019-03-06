@@ -10,9 +10,10 @@ Game.World.prototype._init = function(player) {
     this._zones.push(zone);
     zone._id = 0;
 
-    var ppos = zone.getEmptyRandomPosition();
-    Game.player._x = ppos.x;
-    Game.player._y = ppos.y;
+    // start on the stairs back up
+    var upPos = zone.getConnectionForZone(-1);
+    Game.player._x = Number(upPos.split(',')[0]);
+    Game.player._y = Number(upPos.split(',')[1]);     
     zone.addEntity(Game.player);
 
 };
