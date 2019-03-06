@@ -77,7 +77,7 @@ Game.Dialog.Help.prototype.getOutput = function() {
 
 Game.Dialog.Help.prototype.handleInput = function(inputType, inputData) {
     if (inputType === 'keydown') {
-        if (inputData.keyCode === ROT.VK_ESCAPE) {
+        if (inputData.keyCode === ROT.KEYS.VK_ESCAPE) {
             this.hide();
         }
     } else if (inputType === 'keypress') {
@@ -262,11 +262,11 @@ Game.Dialog.Items.prototype.handleInput = function(inputType, inputData) {
         return;
     }
     if (inputType === 'keydown') {
-        if (inputData.keyCode === ROT.VK_ESCAPE) {
+        if (inputData.keyCode === ROT.KEYS.VK_ESCAPE) {
             this.hide();
-        } else if (inputData.keyCode >= ROT.VK_A &&
-                   inputData.keyCode <= ROT.VK_Z) {
-            var itemIndex = inputData.keyCode - ROT.VK_A;
+        } else if (inputData.keyCode >= ROT.KEYS.VK_A &&
+                   inputData.keyCode <= ROT.KEYS.VK_Z) {
+            var itemIndex = inputData.keyCode - ROT.KEYS.VK_A;
             if (this._items[itemIndex]) {
                 if (this._canSelectMultiple) {
                     if (this._selectedIndices[itemIndex]) {
@@ -281,7 +281,7 @@ Game.Dialog.Items.prototype.handleInput = function(inputType, inputData) {
                     this.doMainAction();
                 }
             }
-        } else if (inputData.keyCode === ROT.VK_RETURN) {
+        } else if (inputData.keyCode === ROT.KEYS.VK_RETURN) {
             this.doMainAction();
         }
     }
@@ -290,11 +290,11 @@ Game.Dialog.Items.prototype.handleInput = function(inputType, inputData) {
 // subwindow input
 Game.Dialog.Items.prototype.handleInputSub = function(inputType, inputData) {
     if (inputType === 'keydown') {
-        if (inputData.keyCode === ROT.VK_ESCAPE) {
+        if (inputData.keyCode === ROT.KEYS.VK_ESCAPE) {
             this._selectedIndices = {};
             this.hideSubWin();
             this.show();
-        } else if (inputData.keyCode === ROT.VK_W) {
+        } else if (inputData.keyCode === ROT.KEYS.VK_W) {
             if (this._currentItem && this._currentItem.hasMixin('Equippable')) {
                 if (Game.player.isEquipped(this._currentItemIndex)) {
                     Game.player.unequip(this._currentItemIndex);
@@ -304,16 +304,16 @@ Game.Dialog.Items.prototype.handleInputSub = function(inputType, inputData) {
                     this.hide();
                 }
             }
-        } else if (inputData.keyCode === ROT.VK_D) {
+        } else if (inputData.keyCode === ROT.KEYS.VK_D) {
             Game.player.dropItem(this._currentItemIndex);
             this.hide();
-        } else if (inputData.keyCode === ROT.VK_E) {
+        } else if (inputData.keyCode === ROT.KEYS.VK_E) {
             if (this._currentItem && this._currentItem.hasMixin('Edible')) {
                 this._currentItem.eat(Game.player, this._currentItemIndex);
                 this.hide();
                 Game.engine.unlock();
             }
-        } else if (inputData.keyCode === ROT.VK_Q) {
+        } else if (inputData.keyCode === ROT.KEYS.VK_Q) {
             if (this._currentItem && this._currentItem.hasMixin('Drinkable')) {
                 this._currentItem.drink(Game.player, this._currentItemIndex);
                 this.hide();
