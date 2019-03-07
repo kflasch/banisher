@@ -496,69 +496,20 @@ Game.EntityMixins.Killable = {
 Game.EntityMixins.Banishable = {
     name: 'Banishable',
     init: function(template) {
-        this._protected = false || template['protected'];
+        this._protected = false || template['hasProtection'];
     },
     attemptRemoval: function(agent) {
         if (!this.isProtected()) {
             this.raiseEvent('onRemoved', agent);
             agent.raiseEvent('onBanished', this);
             this.kill(null, this._zone);
+
+            // TODO: add new entity
         }
     },
     isProtected: function() {
         return this._protected;
     }
-};
-
-Game.EntityMixins.ExperienceGainer = {
-    name: 'ExperienceGainer',
-    init: function(template) {
-        this._level = template['level'] || 1;
-        this._xp = template['xp'] || 0;
-    },
-    getNextLevelExperience: function() {
-        return this._level * this._level * 10;
-    },
-    giveExperience: function(xp) {
-        var levelsGained = 0;
-        var pointsGained = 0;
-        var hpGained = 0;
-        // loop through xp gained to level up, possibly multiple times if enough xp
-        while (xp > 0) {            
-            if (this._xp + xp >= this.getNextLevelExperience()) {
-                var usedXP = this.getNextLevelExperience() - this._xp;
-                xp = xp - usedXP;
-                this._xp += usedXP;
-                this._level++;
-                levelsGained++;
-                this._attackValue++;
-                this._defenseValue++;
-                this._maxHP += 5;
-                this._hp = this._maxHP;
-                pointsGained++;
-                hpGained += 5;
-            } else {
-                this._xp += xp;
-                xp = 0;
-            }
-        }
-        if (levelsGained > 0) {
-            Game.UI.addMessage("You advance to level " + this._level + "! "
-                               + "You gained " + pointsGained + " attack and defense points "
-                               + " and " + hpGained + " HP.");
-        }
-    },
-    listeners: {
-        onKill: function(victim) {
-            var xp = 1;
-            xp += victim.getDefenseValue();            
-            if (victim.hasMixin('Attacker'))
-                xp += victim.getAttackValue();
-            if (xp > 0)
-                this.giveExperience(xp);           
-        }
-    }
-
 };
 
 Game.EntityMixins.CorpseDropper = {
@@ -835,7 +786,6 @@ Game.PlayerTemplate = {
              Game.EntityMixins.Banisher,
              Game.EntityMixins.Attacker,
              Game.EntityMixins.Effectable,
-             Game.EntityMixins.ExperienceGainer,
              Game.EntityMixins.InventoryHolder]
 };
 
@@ -880,14 +830,14 @@ Game.EntityRepository.define('hezrou', {
 });
 
 Game.EntityRepository.define('archfiend', {
-    name: 'arch fiend',
+    name: 'archfiend',
     chr: 'A',
     fg: 'red',
     sightRadius: 10,
     maxHP: 200,
     attackValue: 100,
     defenseValue: 100,
-    attackVerbs: ['befouls', 'rips at'],
+    attackVerbs: ['befouls', 'engulfs'],
     tasks: ['castAoE', 'hunt'],
     foundIn: ['Cavern'],
     mixins: [Game.EntityMixins.TaskActor,
@@ -905,7 +855,7 @@ Game.EntityRepository.define('avengingangel', {
     attackValue: 100,
     defenseValue: 100,
     attackVerbs: ['judges', 'smites'],
-    tasks: ['hunt'],
+    tasks: ['castAoE', 'hunt'],
     foundIn: ['Cavern'],
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
