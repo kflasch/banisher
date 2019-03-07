@@ -359,8 +359,10 @@ Game.EntityMixins.TaskActor = {
 
         if (this.hasMixin(Game.EntityMixins.Effectable))
             this.elapseEffects();
-        if (this.hasMixin(Game.EntityMixins.Banisher))
-            this.elapseBanishCooldown();
+        if (this.hasMixin(Game.EntityMixins.Caster))
+            this.elapseCastCooldown();
+        // if (this.hasMixin(Game.EntityMixins.Banisher))
+        //     this.elapseBanishCooldown();
 
         for (var i = 0; i < this._tasks.length; i++) {
             if (this.canDoTask(this._tasks[i])) {
@@ -376,7 +378,7 @@ Game.EntityMixins.TaskActor = {
         } else if (task === 'wander') {
             return true;
         } else if (task === 'castAoE') {
-            return true;
+            return this.hasMixin('Caster') && this.canCast();
         } else {
             throw new Error('Tried to perform undefined task ' + task);
         }
@@ -386,6 +388,7 @@ Game.EntityMixins.TaskActor = {
         for (var entity of entities) {
             this.attack(entity);
         }
+        this._castCooldown = 8;
     },
     wander: function() {
         var moveOffset = ROT.RNG.getItem(ROT.DIRS[8]);
@@ -651,49 +654,66 @@ Game.EntityMixins.Attacker = {
     }
 };
 
-Game.EntityMixins.AreaAttacker = {
-    name: 'AreaAttacker',
-    groupName: 'AreaAttacker',
+Game.EntityMixins.Caster = {
+    name: 'Caster',
+    groupName: 'Caster',
     init: function(template) {
         this._radius = template['radius'] || 4;
-        this._attackVerbs = template['attackVerbs'] || ['hits'];
+        this._attackVerbs = template['attackVerbs'] || ['casts'];
+        this._castCooldown = 0;
     },
-    getAttackValue: function() {
-        var att = 0;
-        if (this.hasMixin(Game.EntityMixins.Equipper)) {
-            if (this.getWeapon()) {
-                att = this.getWeapon().getAttackValue();
-            }
-        }
-        return att + this._attackValue;
+    canCast: function() {
+        if (this._castCooldown < 1)
+            return true;
+        else
+            return false;
     },
-    getAttackVerb: function() {
-        return getRandomItem(this._attackVerbs);
+    castSpell: function() {
+        if (!this.canCast) return;
     },
-    attack: function(target) {
-        if (target.hasMixin('Killable')) {
-            var attVal = this.getAttackValue();
-            var defVal = target.getDefenseValue();
-            var max = Math.max(0, attVal - defVal);
-            var damage = 1 + Math.floor(Math.random() * max);            
-
-            if (this.hasMixin('PlayerActor')) {
-                Game.UI.addMessage("You strike the " + target.getName()
-                                   + " for " + damage + " damage!");
-            } else if (target.hasMixin('PlayerActor')) {
-                Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
-                                   + " you for " + damage + " damage!");
-            } else {
-                // show player entities attacking each other if they are visible
-                if (this.isVisibleToPlayer())
-                    Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
-                                       + " the " + target.getName()
-                                       + " for " + damage + " damage!");
-            }
-
-            target.modifyHP(this, -damage);
-        }
+    elapseCastCooldown: function() {
+        if (this._castCooldown > 0) {
+            this._castCooldown--;
+        } else {
+            this._castCooldown = 0;
+        }        
     }
+    // getAttackValue: function() {
+    //     var att = 0;
+    //     if (this.hasMixin(Game.EntityMixins.Equipper)) {
+    //         if (this.getWeapon()) {
+    //             att = this.getWeapon().getAttackValue();
+    //         }
+    //     }
+    //     return att + this._attackValue;
+    // },
+    // getAttackVerb: function() {
+    //     return getRandomItem(this._attackVerbs);
+    // },
+    // attack: function(target) {
+    //     if (target.hasMixin('Killable')) {
+    //         var attVal = this.getAttackValue();
+    //         var defVal = target.getDefenseValue();
+    //         var max = Math.max(0, attVal - defVal);
+    //         var damage = 1 + Math.floor(Math.random() * max);            
+
+    //         if (this.hasMixin('PlayerActor')) {
+    //             Game.UI.addMessage("You strike the " + target.getName()
+    //                                + " for " + damage + " damage!");
+    //         } else if (target.hasMixin('PlayerActor')) {
+    //             Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
+    //                                + " you for " + damage + " damage!");
+    //         } else {
+    //             // show player entities attacking each other if they are visible
+    //             if (this.isVisibleToPlayer())
+    //                 Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
+    //                                    + " the " + target.getName()
+    //                                    + " for " + damage + " damage!");
+    //         }
+
+    //         target.modifyHP(this, -damage);
+    //     }
+    // }
 };
 
 Game.EntityMixins.Effectable = {
@@ -801,7 +821,7 @@ Game.EntityRepository.define('imp', {
     attackValue: 1,
     defenseValue: 1,
     attackVerbs: ['bites', 'claws'],
-    tasks: ['castAoE', 'wander'],
+    tasks: ['wander'],
     foundIn: ['Cavern'],
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
@@ -844,6 +864,7 @@ Game.EntityRepository.define('archfiend', {
              Game.EntityMixins.Sight,
              Game.EntityMixins.Killable,
              Game.EntityMixins.Banishable,
+             Game.EntityMixins.Caster,
              Game.EntityMixins.Attacker]
 });
 Game.EntityRepository.define('avengingangel', {
@@ -861,5 +882,6 @@ Game.EntityRepository.define('avengingangel', {
              Game.EntityMixins.Sight,
              Game.EntityMixins.Killable,
              Game.EntityMixins.Banishable,             
+             Game.EntityMixins.Caster,
              Game.EntityMixins.Attacker]
 });
