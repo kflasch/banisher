@@ -468,12 +468,17 @@ Game.EntityMixins.Sight = {
 Game.EntityMixins.Killable = {
     name: 'Killable',
     init: function(template) {
-        this._maxHP = template['maxHP'] || 10;
+        this._maxHP = template['maxHP'] || 1;
         this._hp = template['hp'] || this._maxHP;
         this._defenseValue = template['defenseValue'] || 0;
     },
     // agent is the object that changed hp
     modifyHP: function(agent, delta) {
+        // if any wards, protect from attack and decrease wards
+        if (this.getDefenseValue() > 0) {
+            this._defenseValue--;
+            return;
+        }            
         this._hp += delta;
         if (this._hp > this._maxHP) {
             this._hp = this._maxHP;
@@ -484,13 +489,7 @@ Game.EntityMixins.Killable = {
         }
     },
     getDefenseValue: function() {
-        var def = 0;
-        if (this.hasMixin(Game.EntityMixins.Equipper)) {
-            if (this.getArmor()) {
-                def = this.getArmor().getDefenseValue();
-            }
-        }
-        return def + this._defenseValue;
+        return this._defenseValue;
     }
 };
 
@@ -683,14 +682,17 @@ Game.EntityMixins.Attacker = {
                 Game.UI.addMessage("You strike the " + target.getName()
                                    + " for " + damage + " damage!");
             } else if (target.hasMixin('PlayerActor')) {
-                Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
-                                   + " you for " + damage + " damage!");
+                if (target.getDefenseValue() > 0)
+                    Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
+                                   + " you but your magical ward protects you!");
+                else
+                    Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
+                                   + " you!");                    
             } else {
                 // show player entities attacking each other if they are visible
                 if (this.isVisibleToPlayer())
                     Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
-                                       + " the " + target.getName()
-                                       + " for " + damage + " damage!");
+                                       + " the " + target.getName() + "!");
             }
 
             target.modifyHP(this, -damage);
@@ -822,8 +824,8 @@ Game.PlayerTemplate = {
     chr: '@',
     fg: '#ffa',
     sightRadius: 6,
-    hp: 10,
-    maxHP: 10,
+    hp: 1,
+    maxHP: 1,
     attackValue: 1,
     defenseValue: 1,
     mixins: [Game.EntityMixins.PlayerActor,
