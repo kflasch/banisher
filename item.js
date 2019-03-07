@@ -104,7 +104,7 @@ Game.ItemRepository.define('corpse', {
 }, { disableRandomCreation: true });
 
 Game.ItemRepository.define('starruby', {
-    name: 'starruby',
+    name: 'star ruby',
     chr: '*',
     fg: 'rgb(230,30,30)',
     desc: 'A ruby cut into the form of a star. It radiates heat.'

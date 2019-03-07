@@ -33,11 +33,10 @@ Game.UI.Status = {
         else
             output += "HP: " + player._hp + " / " + player._maxHP;
         output += "<br />";
-        //output += "Attack: " + player.getAttackValue();
-        //output += "<br />";
-        output += "Defense: " + player.getDefenseValue();
+        output += "Wards: " + player.getDefenseValue();
         output += "<br />";
         output += "Cooldown: " + player._banishCooldown;
+        output += "<br />";
         output += "<br />";
         output += "Turns: " + Game.turns;
         output += "<br />";

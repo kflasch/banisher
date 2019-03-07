@@ -153,6 +153,19 @@ Game.Zone.prototype.getEntityAt = function(x, y) {
     return this._entities[x + ',' + y];
 };
 
+Game.Zone.prototype.getEntitiesAround = function(x, y, r) {
+    var entities = [];
+    for (var i=x-r; i<x+r; i++) {
+        for (var j=y-r; j<y+r; j++) {
+            if (i===x && j===y) continue; // dont add center
+            var entity = this.getEntityAt(i, j);
+            if (entity)
+                entities.push(entity);
+        }
+    }
+    return entities;
+};
+
 Game.Zone.prototype.addEntityAtRandomPosition = function(entity) {
     var pos = this.getEmptyRandomPosition();
     entity._x = pos.x;

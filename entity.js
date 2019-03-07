@@ -30,19 +30,13 @@ Game.Entity.prototype.tryMove = function(x, y, zone) {
     var target = zone.getEntityAt(x, y);
     if (target) {
         if (this.hasMixin('Attacker')) {
-            if (target.isHostile() && this.isHostile()) {
-                this.attack(target);
-                // if attacking a non-Attacker, make it one
-                if (!target.hasMixin('Attacker'))
-                    target.addMixin('Attacker');
-                if (target.hasMixin('TaskActor') && !target._tasks.includes('hunt'))
-                    target._tasks.unshift('hunt');
-                return true;
-            } else if (target.hasMixin('Communicator') && isPlayer) {
-                target.chat(this);
-            } else {
-                descMsg = target.getName() + " is in the way.";
-            }
+            this.attack(target);
+            // if attacking a non-Attacker, make it one
+            if (!target.hasMixin('Attacker'))
+                target.addMixin('Attacker');
+            if (target.hasMixin('TaskActor') && !target._tasks.includes('hunt'))
+                target._tasks.unshift('hunt');
+            return true;
         }
     } else if (tile._passable) {
         this.setPosition(x, y, zone);
@@ -168,15 +162,6 @@ Game.Entity.prototype.isVisibleToPlayer = function() {
     }
     return false;
 };
-
-/*
-Game.Entity.prototype.isHostile = function(target) {
-    var isPlayer = this.hasMixin(Game.EntityMixins.PlayerActor);
-    if (isPlayer || target.hasMixin(Game.EntityMixins.PlayerActor))
-        return true;
-    else return false;
-};
-*/
 
 Game.Entity.prototype.exportToString = function() {    
     function replacer(key, value) {
@@ -390,8 +375,16 @@ Game.EntityMixins.TaskActor = {
             return this.hasMixin('Sight') && this.canSee(Game.player);
         } else if (task === 'wander') {
             return true;
+        } else if (task === 'castAoE') {
+            return true;
         } else {
             throw new Error('Tried to perform undefined task ' + task);
+        }
+    },
+    castAoE: function() {
+        var entities = this._zone.getEntitiesAround(this._x, this._y, 3);
+        for (var entity of entities) {
+            this.attack(entity);
         }
     },
     wander: function() {
@@ -666,7 +659,6 @@ Game.EntityMixins.Attacker = {
     init: function(template) {
         this._attackValue = template['attackValue'] || 1;
         this._attackVerbs = template['attackVerbs'] || ['hits'];
-        this._hostile = template['hostile'];
     },
     getAttackValue: function() {
         var att = 0;
@@ -703,10 +695,51 @@ Game.EntityMixins.Attacker = {
 
             target.modifyHP(this, -damage);
         }
+    }
+};
+
+Game.EntityMixins.AreaAttacker = {
+    name: 'AreaAttacker',
+    groupName: 'AreaAttacker',
+    init: function(template) {
+        this._radius = template['radius'] || 4;
+        this._attackVerbs = template['attackVerbs'] || ['hits'];
     },
-    isHostile: function() {
-        if (this._hostile === undefined) return true;
-        else return this._hostile;
+    getAttackValue: function() {
+        var att = 0;
+        if (this.hasMixin(Game.EntityMixins.Equipper)) {
+            if (this.getWeapon()) {
+                att = this.getWeapon().getAttackValue();
+            }
+        }
+        return att + this._attackValue;
+    },
+    getAttackVerb: function() {
+        return getRandomItem(this._attackVerbs);
+    },
+    attack: function(target) {
+        if (target.hasMixin('Killable')) {
+            var attVal = this.getAttackValue();
+            var defVal = target.getDefenseValue();
+            var max = Math.max(0, attVal - defVal);
+            var damage = 1 + Math.floor(Math.random() * max);            
+
+            if (this.hasMixin('PlayerActor')) {
+                Game.UI.addMessage("You strike the " + target.getName()
+                                   + " for " + damage + " damage!");
+            } else if (target.hasMixin('PlayerActor')) {
+                Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
+                                   + " you for " + damage + " damage!");
+            } else {
+                // show player entities attacking each other if they are visible
+                if (this.isVisibleToPlayer())
+                    Game.UI.addMessage("The " + this.getName() + " " + this.getAttackVerb()
+                                       + " the " + target.getName()
+                                       + " for " + damage + " damage!");
+            }
+
+            target.modifyHP(this, -damage);
+        }
     }
 };
 
@@ -741,20 +774,6 @@ Game.EntityMixins.Effectable = {
             } else {
                 this._effects[i].duration--;
             }
-        }
-    }
-};
-
-Game.EntityMixins.Communicator = {
-    name: 'Communicator',
-    groupName: 'Communciator',
-    init: function(template) {
-        this._dialogue = template['dialogue'] || ['...'];
-    },
-    chat: function(target) {
-        if (target.hasMixin('PlayerActor')) {
-            Game.UI.addMessage("The " + this.getName() + " says \""
-                               + getRandomItem(this._dialogue) + "\"");
         }
     }
 };
@@ -825,11 +844,12 @@ Game.EntityRepository.define('imp', {
     name: 'imp',
     chr: 'i',
     fg: 'red',
-    sightRadius: 4,
-    maxHP: 3,
+    sightRadius: 3,
+    maxHP: 2,
     attackValue: 1,
     defenseValue: 1,
     attackVerbs: ['bites', 'claws'],
+    tasks: ['castAoE', 'wander'],
     foundIn: ['Cavern'],
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
@@ -838,16 +858,52 @@ Game.EntityRepository.define('imp', {
              Game.EntityMixins.Attacker,
              Game.EntityMixins.CorpseDropper]
 });
-Game.EntityRepository.define('ghost', {
-    name: 'ghost',
+Game.EntityRepository.define('hezrou', {
+    name: 'hezrou',
     chr: 'h',
-    fg: 'blue',
-    sightRadius: 3,
-    maxHP: 1,
-    attackValue: 1,
-    defenseValue: 1,
-    attackVerbs: ['touches'],
-    tasks: ['wander'],
+    fg: 'red',
+    sightRadius: 6,
+    maxHP: 50,
+    attackValue: 25,
+    defenseValue: 25,
+    attackVerbs: ['bites', 'claws'],
+    tasks: ['hunt'],
+    foundIn: ['Cavern'],
+    mixins: [Game.EntityMixins.TaskActor,
+             Game.EntityMixins.Sight,
+             Game.EntityMixins.Killable,
+             Game.EntityMixins.Banishable,
+             Game.EntityMixins.Attacker,
+             Game.EntityMixins.CorpseDropper]
+});
+
+Game.EntityRepository.define('archfiend', {
+    name: 'arch fiend',
+    chr: 'A',
+    fg: 'red',
+    sightRadius: 10,
+    maxHP: 200,
+    attackValue: 100,
+    defenseValue: 100,
+    attackVerbs: ['befouls', 'rips at'],
+    tasks: ['castAoE', 'hunt'],
+    foundIn: ['Cavern'],
+    mixins: [Game.EntityMixins.TaskActor,
+             Game.EntityMixins.Sight,
+             Game.EntityMixins.Killable,
+             Game.EntityMixins.Banishable,
+             Game.EntityMixins.Attacker]
+});
+Game.EntityRepository.define('avengingangel', {
+    name: 'avenging angel',
+    chr: 'A',
+    fg: 'white',
+    sightRadius: 10,
+    maxHP: 200,
+    attackValue: 100,
+    defenseValue: 100,
+    attackVerbs: ['judges', 'smites'],
+    tasks: ['hunt'],
     foundIn: ['Cavern'],
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
