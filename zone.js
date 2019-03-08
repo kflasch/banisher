@@ -278,9 +278,17 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
     map.create(); map.create(); map.create();
     map.connect(function(x, y, value) {
         if (value === 1) {
-            this._tiles[x][y] = Game.Tile.caveWall;
+            if (ROT.RNG.getUniform() < 0.05)
+                this._tiles[x][y] = Game.Tile.caveWallDark;
+            else if (ROT.RNG.getUniform() < 0.3)
+                this._tiles[x][y] = Game.Tile.caveWallAlt;
+            else
+                this._tiles[x][y] = Game.Tile.caveWall;
         } else {
-            this._tiles[x][y] = Game.Tile.caveFloor;
+            if (ROT.RNG.getUniform() < 0.3)
+                this._tiles[x][y] = Game.Tile.caveFloorAlt;
+            else
+                this._tiles[x][y] = Game.Tile.caveFloor;
         }
     }.bind(this));
 
@@ -316,10 +324,18 @@ Game.Zone.Shrine = function Shrine(tiles, fromZoneID, depth) {
     map.randomize(0.5);
     map.create(); map.create(); map.create();
     map.connect(function(x, y, value) {
-        if (value === 1) {
-            this._tiles[x][y] = Game.Tile.caveWall;
+         if (value === 1) {
+            if (ROT.RNG.getUniform() < 0.05)
+                this._tiles[x][y] = Game.Tile.caveWall;
+            else if (ROT.RNG.getUniform() < 0.3)
+                this._tiles[x][y] = Game.Tile.caveWallAlt;
+            else
+                this._tiles[x][y] = Game.Tile.caveWallDark;
         } else {
-            this._tiles[x][y] = Game.Tile.caveFloor;
+            if (ROT.RNG.getUniform() < 0.3)
+                this._tiles[x][y] = Game.Tile.caveFloor;
+            else
+                this._tiles[x][y] = Game.Tile.caveFloorAlt;
         }
     }.bind(this));
 

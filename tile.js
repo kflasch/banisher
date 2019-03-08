@@ -21,9 +21,33 @@ Game.Tile.caveFloor = new Game.Tile({
     blocksLight: false,
     desc: 'cavern floor'
 });
+Game.Tile.caveFloorAlt = new Game.Tile({
+    chr: '.',
+    fg: 'rgb(170,111,31)',
+    dfg: ROT.Color.toHex(ROT.Color.multiply([139,69,19], [80, 80, 80])),
+    passable: true,
+    blocksLight: false,
+    desc: 'cavern floor'
+});
 Game.Tile.caveWall = new Game.Tile({
     chr: '#',
     fg: 'rgb(184,134,11)',
+    dfg: ROT.Color.toHex(ROT.Color.multiply([184,134,11], [80, 80, 80])),
+    passable: false,
+    blocksLight: true,
+    desc: 'a cavern wall'
+});
+Game.Tile.caveWallAlt = new Game.Tile({
+    chr: '#',
+    fg: 'rgb(164,104,11)',
+    dfg: ROT.Color.toHex(ROT.Color.multiply([184,134,11], [80, 80, 80])),
+    passable: false,
+    blocksLight: true,
+    desc: 'a cavern wall'
+});
+Game.Tile.caveWallDark = new Game.Tile({
+    chr: '#',
+    fg: 'rgb(100,51,22)',
     dfg: ROT.Color.toHex(ROT.Color.multiply([184,134,11], [80, 80, 80])),
     passable: false,
     blocksLight: true,
@@ -60,26 +84,4 @@ Game.Tile.stairUp = new Game.Tile({
     passable: true,
     blocksLight: false,
     desc: 'ascending stairs'
-});
-Game.Tile.water = new Game.Tile({
-    chr: '~',
-    fg: 'rgb(0, 0, 160)',
-    dfg: ROT.Color.toHex(ROT.Color.multiply([0,0,160], [20, 100, 100])),
-    passable: true,
-    blocksLight: false,
-    desc: 'water'
-});
-Game.Tile.closedDoor = new Game.Tile({
-    chr: '+',
-    fg: 'rgb(102, 51, 0)',
-    blocksLight: true,
-    passable: false,
-    desc: 'a closed door'
-});
-Game.Tile.openDoor = new Game.Tile({
-    chr: '-',
-    fg: 'rgb(102, 51, 0)',
-    blocksLight: false,
-    passable: true,
-    desc: 'an open door'
 });
