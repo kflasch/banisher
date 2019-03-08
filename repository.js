@@ -4,6 +4,7 @@ Game.Repository = function(name, ctor) {
     this._ctor = ctor;
     this._randomTemplates = {};
     this._zoneRandomTemplates = {};
+    this._ratingTemplates = {};
 };
 
 Game.Repository.prototype.define = function(name, template, options) {
@@ -20,6 +21,12 @@ Game.Repository.prototype.define = function(name, template, options) {
                 itemNames.push(name);
                 this._zoneRandomTemplates[template.foundIn[i]] = itemNames;
             }
+        }
+        if (template.rating !== undefined) {
+            var thingNames = this._ratingTemplates[template.rating];
+            if (thingNames == undefined) thingNames = [];
+            thingNames.push(name);
+            this._ratingTemplates[template.rating] = thingNames;
         }
     }
 };
