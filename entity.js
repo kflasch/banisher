@@ -87,7 +87,7 @@ Game.Entity.prototype.changeZone = function() {
     if (typeof zoneVal != 'undefined') {
         // check win condition
         if (zoneVal === -1) {
-            if (this.hasItem('starruby')) {            
+            if (this.hasItem('star ruby')) {            
                 Game.wonGame();
             } else {
                 Game.UI.addMessage('You cannot leave without the Star Ruby!');
@@ -774,7 +774,7 @@ Game.EntityMixins.Banisher = {
         return true;
     },
     setBanishCooldown: function() {
-        if (this.hasItem('starruby'))
+        if (this.hasItem('star ruby'))
             this._banishCooldown = 0;
         else
             this._banishCooldown = 5;

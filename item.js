@@ -50,6 +50,21 @@ Game.ItemMixins.Drinkable = {
     }
 };
 
+Game.ItemMixins.Readable = {
+    name: 'Readable',
+    init: function(template) {
+        this.type = template['type'] || 0;
+        this.value = template['value'] || 1;
+        this.duration = template['duration'] || 10;
+    },
+    read: function(entity, invIndex) {
+        if (entity.hasMixin('Effectable')) {
+            entity.addEffect(this.type, this.value, this.duration);
+        }
+        entity.removeItem(invIndex);
+    }
+};
+
 Game.ItemMixins.Equippable = {
     name: 'Equippable',
     init: function(template) {
@@ -66,13 +81,6 @@ Game.ItemMixins.Equippable = {
     }
 };
 
-Game.ItemMixins.Throwable = {
-    name: 'Throwable',
-    init: function(template) {
-    }
-};
-
-
 // item repo & definitions
 
 Game.ItemRepository = new Game.Repository('items', Game.Item);
@@ -83,7 +91,7 @@ Game.ItemRepository.define('book', {
     fg: 'brown',
     desc: 'A worn leather-bound tome with strange symbols on the cover.',
     foundIn: [],
-    mixins: [Game.ItemMixins.Throwable]
+    mixins: [Game.ItemMixins.Readable]
 });
 
 Game.ItemRepository.define('defensepotion', {
@@ -103,7 +111,7 @@ Game.ItemRepository.define('corpse', {
     chr: '%'
 }, { disableRandomCreation: true });
 
-Game.ItemRepository.define('starruby', {
+Game.ItemRepository.define('star ruby', {
     name: 'star ruby',
     chr: '*',
     fg: 'rgb(230,30,30)',
