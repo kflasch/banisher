@@ -125,19 +125,16 @@ Game.Zone.prototype.getEmptyRandomPosition = function() {
     return {x: x, y: y};
 };
 
-Game.Zone.prototype.getEmptyRandomPositionNear = function(nx, ny, dist) {
-    var x, y;
-    var maxx = nx + dist, maxy = ny + dist;
-    var minx = nx - dist, miny = ny - dist;
-    var maxCheck = Math.pow((dist + dist + 1), 2), check = 0;
+// get an empty position at least ndist away
+// care needed if ndist is bigger than map allows!
+Game.Zone.prototype.getEmptyRandomPositionAway = function(nx, ny, ndist) {
+    var pos, dist;
+    if (ndist > (this._width-25)) ndist = this._width/2 + 15; // safety check
     do {
-        //x = Math.floor(ROT.RNG.getUniform() * (maxx - minx + 1)) + min;
-        x = ROT.RNG.getUniformInt(minx, maxx);
-        y = ROT.RNG.getUniformInt(miny, maxy);
-        check++;
-    } while (!this.isPlaceable(x, y) && check<=maxCheck);
-    if (check >= maxCheck) return null;
-    return {x: x, y: y};
+        pos = this.getEmptyRandomPosition();
+        dist = Math.sqrt(Math.pow((nx - pos.x),2) + Math.pow((ny - pos.y),2));
+    } while (dist < ndist);
+    return {x: pos.x, y: pos.y};
 };
 
 // true if given pos is passable, has no entities and not certain tiles
@@ -168,6 +165,14 @@ Game.Zone.prototype.getEntitiesAround = function(x, y, r) {
 
 Game.Zone.prototype.addEntityAtRandomPosition = function(entity) {
     var pos = this.getEmptyRandomPosition();
+    entity._x = pos.x;
+    entity._y = pos.y;
+    this.addEntity(entity);
+};
+
+Game.Zone.prototype.addEntityAwayFrom = function(entity, x, y, dist) {
+    var pos = this.getEmptyRandomPositionAway(x, y, dist);
+//    var pos = this.getEmptyRandomPosition();
     entity._x = pos.x;
     entity._y = pos.y;
     this.addEntity(entity);

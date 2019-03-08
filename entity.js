@@ -507,7 +507,9 @@ Game.EntityMixins.Banishable = {
             agent.raiseEvent('onBanished', this);
             this.kill(null, this._zone);
 
-            // TODO: add new entity
+            // TODO: make entity stronger 
+            var newEntity = Game.EntityRepository.createRandom();
+            this._zone.addEntityAwayFrom(newEntity, agent._x, agent._y, 40);
         }
     },
     isProtected: function() {
