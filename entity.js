@@ -6,6 +6,7 @@ Game.Entity = function Entity(properties) {
     this._x = properties['x'] || 0;
     this._y = properties['y'] || 0;
     this._sightRadius = properties['sightRadius'] || 0;
+    this._rating = properties['rating'] || 1;
 
     this._zone = null;
     this._alive = true;
@@ -503,12 +504,14 @@ Game.EntityMixins.Banishable = {
     },
     attemptRemoval: function(agent) {
         if (!this.isProtected()) {
-            this.raiseEvent('onRemoved', agent);
+           this.raiseEvent('onRemoved', agent);
             agent.raiseEvent('onBanished', this);
             this.kill(null, this._zone);
 
-            // TODO: make entity stronger 
-            var newEntity = Game.EntityRepository.createRandom();
+            // each banish, stronger ones appear
+            var rating = this._rating+1;
+            if (rating > 5) rating = 5;
+            var newEntity = Game.EntityRepository.createRandom(rating);
             this._zone.addEntityAwayFrom(newEntity, agent._x, agent._y, 40);
         }
     },
@@ -520,7 +523,7 @@ Game.EntityMixins.Banishable = {
 Game.EntityMixins.CorpseDropper = {
     name: 'CorpseDropper',
     init: function(template) {
-        // Chance of dropping a cropse (out of 100).
+        // Chance of dropping a corpse (out of 100).
         this._corpseDropRate = template['corpseDropRate'] || 100;
     },
     listeners: {
