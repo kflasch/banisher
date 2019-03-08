@@ -10,7 +10,7 @@ Game.Dialog.prototype.show = function() {
     var elem = document.getElementById("overlay");
     elem.style.visibility = "visible";
     output = "<div id='main'>";
-    output += "<span style='color:orange'>" + this._title + "</span> <br />";
+    output += "<span style='color:#ff4500'>" + this._title + "</span> <br />";
     output += this.getOutput() + "</div>";
     output += "<div id='sub'>";
     output += "</div>";
@@ -64,10 +64,10 @@ extendObj(Game.Dialog.Help, Game.Dialog);
 
 Game.Dialog.Help.prototype.getOutput = function() {
     var output = "Use arrow keys or numpad to move <br />";
+    output += "'x' banish <br />";
     output += "'g' to get / pick up <br />";
     output += "'d' to drop <br />";
     output += "'i' to show inventory <br />";
-    output += "'o' + direction to open/close door <br />";
     output += "'.' to wait a turn <br />";
     output += "'ESC' to exit screens <br />";
     return output;
@@ -127,9 +127,13 @@ Game.Dialog.MainMenu.prototype.handleInput = function(inputType, inputData) {
 Game.Dialog.MainMenu.prototype.showAboutSubWin = function() {
     var elem = document.getElementById("sub");
     elem.style.visibility = "visible";
-    var output = "<span style='color:#CCCC00'>About</span> <br />";
+    var output = "<span style='color:#ff4522'>About</span> <br />";
     output += "<br />";
-    output += "<i>In centuries past... ";
+    output += "<i>In centuries past, The Order of Banishers kept the ";
+    output += "world safe from foul creatures who would seek to destroy it. ";
+    output += "Over time, the veils between worlds weakened, allowing these ";
+    output += "beings back into the world. The power of the ancient Star Ruby ";
+    output += "is the Order's hope to once again seal these breaches!";
     output += "</i>";
     output += "<br /> <br />";
     output += "Banisher plays similar to a traditional roguelike. <br />";

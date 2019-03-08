@@ -18,7 +18,7 @@ var Game = {
 
     init: function() {
         this.display = new ROT.Display({fontFamily:"droid sans mono, monospace",
-                                        fontSize: 18,
+                                        fontSize: 22,
                                         width:this.canvasWidth, height:this.canvasHeight});
 
         document.getElementById('ROTDisplay').appendChild(this.display.getContainer());
@@ -59,7 +59,7 @@ var Game = {
         this.seed = ROT.RNG.getSeed();
         this._generatePlayer();
         this._generateWorld();
-        Game.UI.addMessage("Descend...");
+        Game.UI.addMessage("Descend into the cavern to recover the Star Ruby!");
 
         this.scheduler.add(this.player, true);
 //        this._gameLoop();
@@ -263,8 +263,8 @@ Game.handleInput = function(inputType, inputData) {
             Game.engine.unlock();
             return;
         } else if (inputData.keyCode === ROT.KEYS.VK_S) {
-            this._saveGame();
-            Game.UI.addMessage("Game saved.");
+            //this._saveGame();
+            //Game.UI.addMessage("Game saved.");
             return;
         } else if (inputData.keyCode === ROT.KEYS.VK_BACK_SLASH) {
             Game.debug = (Game.debug === false) ? true : false;

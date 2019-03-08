@@ -79,8 +79,8 @@ body {
 }
 
 .uibot {
-    width: 900px;
-    margin-top: 460px;
+    width: 1050px;
+    margin-top: 550px;
     float: left;
     position: relative;
     display: inline-block;
@@ -95,7 +95,7 @@ body {
     color: #DEDEDE;
     height: 100px;
     background-color: rgba(34, 34, 34, 0.125);
-    border: 1px rgba(34, 34, 34, 0.75) solid;
+    border: 1px rgba(100, 75, 75, 0.75) solid;
 }
 
 #overlay {
