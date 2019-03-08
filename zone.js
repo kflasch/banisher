@@ -290,13 +290,14 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
     
     pos = this.getEmptyRandomPosition();
     this._tiles[pos.x][pos.y] = Game.Tile.stairDown;
-    if (depth === 1)
+    if (depth === 5)
         this._connections[pos.x+','+pos.y] = 'Shrine';
     else
         this._connections[pos.x+','+pos.y] = 'Cavern';
 
-    for (var i=0; i<10; i++) {
-        var entity = Game.EntityRepository.createRandom();
+    var totalEnts = Math.ceil(10 / this._depth);
+    for (var i=0; i<totalEnts; i++) {
+        var entity = Game.EntityRepository.createRandom(this._depth);
         this.addEntityAtRandomPosition(entity);
     }
     
@@ -326,7 +327,12 @@ Game.Zone.Shrine = function Shrine(tiles, fromZoneID, depth) {
     this._tiles[pos.x][pos.y] = Game.Tile.stairUp;
     this._connections[pos.x+','+pos.y] = fromZoneID;
 
-    this.addItemAtRandomPosition(Game.ItemRepository.create('starruby'));
+    this.addItemAtRandomPosition(Game.ItemRepository.create('star ruby'));
+
+    var entity = Game.EntityRepository.createRandom(5);
+    this.addEntityAtRandomPosition(entity);
+    entity = Game.EntityRepository.createRandom(5);
+    this.addEntityAtRandomPosition(entity);
 
 };
 extendObj(Game.Zone.Shrine, Game.Zone);

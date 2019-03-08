@@ -822,7 +822,7 @@ Game.EntityRepository = new Game.Repository('entities', Game.Entity);
 Game.EntityRepository.define('imp', {
     name: 'imp',
     chr: 'i',
-    fg: 'red',
+    fg: '#b22222',
     sightRadius: 3,
     maxHP: 2,
     attackValue: 1,
@@ -830,6 +830,26 @@ Game.EntityRepository.define('imp', {
     attackVerbs: ['bites', 'claws'],
     tasks: ['wander'],
     foundIn: ['Cavern'],
+    rating: 1,
+    mixins: [Game.EntityMixins.TaskActor,
+             Game.EntityMixins.Sight,
+             Game.EntityMixins.Killable,
+             Game.EntityMixins.Banishable,
+             Game.EntityMixins.Attacker,
+             Game.EntityMixins.CorpseDropper]
+});
+Game.EntityRepository.define('vrock', {
+    name: 'vrock',
+    chr: 'v',
+    fg: '#ff8c00',
+    sightRadius: 5,
+    maxHP: 25,
+    attackValue: 10,
+    defenseValue: 10,
+    attackVerbs: ['rips at', 'screeches at', 'pecks'],
+    tasks: ['wander'],
+    foundIn: ['Cavern'],
+    rating: 2,
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
              Game.EntityMixins.Killable,
@@ -840,7 +860,7 @@ Game.EntityRepository.define('imp', {
 Game.EntityRepository.define('hezrou', {
     name: 'hezrou',
     chr: 'h',
-    fg: 'red',
+    fg: '#2f4f4f',
     sightRadius: 6,
     maxHP: 50,
     attackValue: 25,
@@ -848,6 +868,7 @@ Game.EntityRepository.define('hezrou', {
     attackVerbs: ['bites', 'claws'],
     tasks: ['hunt'],
     foundIn: ['Cavern'],
+    rating: 3,
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
              Game.EntityMixins.Killable,
@@ -855,7 +876,25 @@ Game.EntityRepository.define('hezrou', {
              Game.EntityMixins.Attacker,
              Game.EntityMixins.CorpseDropper]
 });
-
+Game.EntityRepository.define('marilith', {
+    name: 'marilith',
+    chr: 'm',
+    fg: 'purple',
+    sightRadius: 8,
+    maxHP: 70,
+    attackValue: 30,
+    defenseValue: 30,
+    attackVerbs: ['slices', 'tail whips'],
+    tasks: ['hunt'],
+    foundIn: ['Cavern'],
+    rating: 4,
+    mixins: [Game.EntityMixins.TaskActor,
+             Game.EntityMixins.Sight,
+             Game.EntityMixins.Killable,
+             Game.EntityMixins.Banishable,
+             Game.EntityMixins.Attacker,
+             Game.EntityMixins.CorpseDropper]
+});
 Game.EntityRepository.define('archfiend', {
     name: 'archfiend',
     chr: 'A',
@@ -864,9 +903,10 @@ Game.EntityRepository.define('archfiend', {
     maxHP: 200,
     attackValue: 100,
     defenseValue: 100,
-    attackVerbs: ['befouls', 'engulfs'],
+    attackVerbs: ['befouls', 'engulfs', 'curses'],
     tasks: ['castAoE', 'hunt'],
     foundIn: ['Cavern'],
+    rating: 5,
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
              Game.EntityMixins.Killable,
@@ -874,17 +914,18 @@ Game.EntityRepository.define('archfiend', {
              Game.EntityMixins.Caster,
              Game.EntityMixins.Attacker]
 });
-Game.EntityRepository.define('avengingangel', {
-    name: 'avenging angel',
+Game.EntityRepository.define('archon', {
+    name: 'archon',
     chr: 'A',
     fg: 'white',
     sightRadius: 10,
     maxHP: 200,
     attackValue: 100,
     defenseValue: 100,
-    attackVerbs: ['judges', 'smites'],
+    attackVerbs: ['judges', 'smites', 'sings'],
     tasks: ['castAoE', 'hunt'],
     foundIn: ['Cavern'],
+    rating: 5,
     mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Sight,
              Game.EntityMixins.Killable,

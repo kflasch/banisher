@@ -52,10 +52,10 @@ Game.Repository.prototype.create = function(name, extraProperties) {
 };
 
 // Create an object based on a random template, optionally only from zone
-Game.Repository.prototype.createRandom = function(zoneName) {
+Game.Repository.prototype.createRandom = function(rating) {
     // Pick a random key and create an object based off of it.
-    if (zoneName !== undefined) {
-	return this.create(ROT.RNG.getItem(this._zoneRandomTemplates[zoneName]));
+    if (rating !== undefined) {
+	return this.create(ROT.RNG.getItem(this._ratingTemplates[rating]));
     } else {
 	return this.create(ROT.RNG.getItem(Object.keys(this._randomTemplates)));
     }
