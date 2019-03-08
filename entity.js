@@ -758,6 +758,7 @@ Game.EntityMixins.Banisher = {
     groupName: 'Banisher',
     init: function(template) {
         this._banishCooldown = 0;
+        this._banishesUsed = 0;
     },
     banish: function(entities) {
         if (entities.length < 1) {
@@ -772,14 +773,18 @@ Game.EntityMixins.Banisher = {
         for (var i=0; i<entities.length; i++) {
             entities[i].attemptRemoval(this);
         }
+        this._banishesUsed++;        
         this.setBanishCooldown();
         return true;
     },
     setBanishCooldown: function() {
-        if (this.hasItem('star ruby'))
+        // cooldown resets immediately if have star ruby
+        // otherwise cooldown increases with the more banishes done
+        if (this.hasItem('star ruby')) {
             this._banishCooldown = 0;
-        else
-            this._banishCooldown = 5;
+        } else {
+            this._banishCooldown = 5 * this._banishesUsed;
+        }
     },
     elapseBanishCooldown: function() {
         if (this._banishCooldown > 0) {
