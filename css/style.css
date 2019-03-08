@@ -1,9 +1,5 @@
 @charset "utf-8";
 
-/*
-@import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
-*/
-
 @font-face {
   font-family: 'Droid Sans Mono';
   font-style: normal;
@@ -11,20 +7,9 @@
   src: local('Droid Sans Mono Regular'), local('DroidSansMono-Regular'), url(DroidSansMono-Regular.ttf) format('truetype');
 }
 
-/*
-@font-face {
-        font-family: 'DejaVuSansMono';
-        src: url('DejaVuSansMono.eot');
-        src: url('DejaVuSansMono.eot?#iefix') format('eot'),
-             url('DejaVuSansMono.woff') format('woff'),
-             url('DejaVuSansMono.ttf') format('truetype');
-}
-*/
-
 body {
     margin: 0;
     background-color: #000;
-/*    font-family: "DejaVuSansMono", "DejaVu Sans Mono", "Monaco", "Consolas", monospace; */
     font-family: droid sans mono, monospace;
     color: #b82;
 }
@@ -43,7 +28,6 @@ body {
     height: 100%;
     background-color: #000000;
     position: fixed;
-/*    display: block; */
     padding: 5px;
     float: left;
 }
@@ -51,7 +35,6 @@ body {
 .ui {
     width: 350px;
     height: 100%;
-/*    background-color: #222222; */
     float: right;
     position: relative;
     display: inline-block;
@@ -103,8 +86,6 @@ body {
     position: absolute;
     left: 100px;
     top: 0px;
-/*    width:80%; */
-/*    height:100%; */
     text-align:center;
     z-index: 1000;
 }
@@ -112,8 +93,7 @@ body {
 #overlay #main {
     float: left;
     width: 400px;
-    height: 500px;
-/*  margin-left: 150px; */
+    height: 400px;
     margin-top: 75px;
     color: #DEDEDE;
     background-color: rgba(34, 34, 34, 0.85);
@@ -127,8 +107,7 @@ body {
     position: relative;
     float: right;
     width: 500px;
-    height: 475px;
-/*  margin-left: 550px; */
+    height: 400px;
     margin-top: 75px;
     color: #DEDEDE;
     background-color: rgba(34, 34, 34, 0.85);
