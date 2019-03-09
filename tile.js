@@ -31,7 +31,7 @@ Game.Tile.caveFloorAlt = new Game.Tile({
 });
 Game.Tile.caveWall = new Game.Tile({
     chr: '#',
-    fg: 'rgb(140,140,130)',
+    fg: 'rgb(120,90,20)',
     dfg: ROT.Color.toHex(ROT.Color.multiply([184,134,11], [80, 80, 80])),
     passable: false,
     blocksLight: true,

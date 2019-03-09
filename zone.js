@@ -320,7 +320,7 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
         this.addEntityAtRandomPosition(entity);
     }
 
-    for (i=0; i<6; i++) {
+    for (i=0; i<8; i++) {
         this.addItemAtRandomPosition(Game.ItemRepository.createRandom());
     }
     

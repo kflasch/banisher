@@ -737,17 +737,17 @@ Game.EntityMixins.Effectable = {
         }
         if (type === 'defense')
             this._defenseValue += value;
-        else if (type === 'attack')
-            this._attackValue += value;
         else if (type === 'refresh')
             this._banishCooldown = 0;
+        else if (type === 'farsight')
+            this._sightRadius += value;
     },
     removeEffect: function(effect, index) {
         this._effects.splice(index, 1);
         if (effect.type === 'defense')
             this._defenseValue -= effect.value;
-        else if (effect.type === 'attack')
-            this._attackValue -= effect.value;
+        else if (effect.type === 'farsight')
+            this._sightRadius -= effect.value;
     },
     elapseEffects: function() {
         // traverse array in reverse because splice re-indexes
@@ -832,7 +832,7 @@ Game.EntityRepository.define('imp', {
     name: 'imp',
     chr: 'i',
     fg: '#b22222',
-    sightRadius: 3,
+    sightRadius: 2,
     maxHP: 2,
     attackValue: 1,
     defenseValue: 1,
@@ -851,12 +851,12 @@ Game.EntityRepository.define('vrock', {
     name: 'vrock',
     chr: 'v',
     fg: '#ff8c00',
-    sightRadius: 5,
+    sightRadius: 3,
     maxHP: 25,
     attackValue: 10,
     defenseValue: 10,
     attackVerbs: ['rips at', 'screeches at', 'pecks'],
-    tasks: ['wander'],
+    tasks: ['hunt', 'wander'],
     foundIn: ['Cavern'],
     rating: 2,
     mixins: [Game.EntityMixins.TaskActor,
@@ -875,7 +875,7 @@ Game.EntityRepository.define('hezrou', {
     attackValue: 25,
     defenseValue: 25,
     attackVerbs: ['bites', 'claws'],
-    tasks: ['hunt'],
+    tasks: ['hunt', 'wander'],
     foundIn: ['Cavern'],
     rating: 3,
     mixins: [Game.EntityMixins.TaskActor,
@@ -894,7 +894,7 @@ Game.EntityRepository.define('marilith', {
     attackValue: 30,
     defenseValue: 30,
     attackVerbs: ['slices', 'tail whips'],
-    tasks: ['hunt'],
+    tasks: ['hunt', 'wander'],
     foundIn: ['Cavern'],
     rating: 4,
     mixins: [Game.EntityMixins.TaskActor,
@@ -913,7 +913,7 @@ Game.EntityRepository.define('archfiend', {
     attackValue: 100,
     defenseValue: 100,
     attackVerbs: ['befouls', 'engulfs', 'curses'],
-    tasks: ['castAoE', 'hunt'],
+    tasks: ['castAoE', 'hunt', 'wander'],
     foundIn: ['Cavern'],
     rating: 5,
     mixins: [Game.EntityMixins.TaskActor,
@@ -932,7 +932,7 @@ Game.EntityRepository.define('archon', {
     attackValue: 100,
     defenseValue: 100,
     attackVerbs: ['judges', 'smites', 'gazes at'],
-    tasks: ['castAoE', 'hunt'],
+    tasks: ['castAoE', 'wander'],
     foundIn: ['Cavern'],
     rating: 5,
     mixins: [Game.EntityMixins.TaskActor,

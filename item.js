@@ -59,10 +59,15 @@ Game.ItemMixins.Readable = {
         this.value = template['value'] || 1;
     },
     read: function(entity, invIndex) {
-        if (entity.hasMixin('Killable')) {
-            if (ROT.RNG.getUniform() > 0.8) this.value++;
-            entity._defenseValue = entity._defenseValue + this.value;
+        if (this.type === 'warding') {
+            if (entity.hasMixin('Killable')) {
+                if (ROT.RNG.getUniform() > 0.8) this.value++;
+                entity._defenseValue += this.value;
+            }
+        } else if (this.type === 'rewriting') {
+            
         }
+        
         if (entity.hasMixin('PlayerActor'))
             Game.UI.addMessage("As you recite the words from the " + this._name +
                                ", it crumbles to dust.");
@@ -93,13 +98,24 @@ Game.ItemRepository = new Game.Repository('items', Game.Item);
 Game.ItemRepository.define('bookofwarding', {
     name: 'book of warding',
     chr: '+',
-    fg: 'brown',
+    fg: 'teal',
     type: 'warding',
     value: 1,
     desc: 'A worn leather-bound tome with strange symbols on the cover. It contains incantations to used to protect oneself.',
     foundIn: ['Cavern'],
     mixins: [Game.ItemMixins.Readable]
 });
+
+// Game.ItemRepository.define('bookofrewriting', {
+//     name: 'book of rewriting',
+//     chr: '+',
+//     fg: 'green',
+//     type: 'rewriting',
+//     value: 1,
+//     desc: 'A glowing green book with a metal latch. It describes a ritual to alter your surroundings.',
+//     foundIn: ['Cavern'],
+//     mixins: [Game.ItemMixins.Readable]
+// });
 
 Game.ItemRepository.define('refreshpotion', {
     name: 'potion of refreshment',
@@ -109,6 +125,18 @@ Game.ItemRepository.define('refreshpotion', {
     duration: -1,
     value: 1,
     desc: 'A potion that will refresh you, setting your cooldown back to 0.',
+    foundIn: ['Cavern'],
+    mixins: [Game.ItemMixins.Drinkable]
+});
+
+Game.ItemRepository.define('farsightpotion', {
+    name: 'potion of farsight',
+    chr: '!',
+    fg: 'yellow',
+    type: 'farsight',
+    duration: 30,
+    value: 10,
+    desc: 'A potion that will imbue you with increased sight.',
     foundIn: ['Cavern'],
     mixins: [Game.ItemMixins.Drinkable]
 });

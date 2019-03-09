@@ -267,8 +267,8 @@ Game.handleInput = function(inputType, inputData) {
             //Game.UI.addMessage("Game saved.");
             return;
         } else if (inputData.keyCode === ROT.KEYS.VK_BACK_SLASH) {
-                        Game.debug = (Game.debug === false) ? true : false;
-            //return;
+            //Game.debug = (Game.debug === false) ? true : false;
+            return;
         } else {
             return;
         }

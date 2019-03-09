@@ -6,7 +6,7 @@ Game.World = function() {
 };
 
 Game.World.prototype._init = function(player) {
-    var zone = new Game.Zone.Shrine(this._getNewTiles(), -1, 1);
+    var zone = new Game.Zone.Cavern(this._getNewTiles(), -1, 1);
     this._zones.push(zone);
     zone._id = 0;
 
