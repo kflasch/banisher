@@ -60,7 +60,6 @@ Game.Dialog.Help = function() {
 };
 
 extendObj(Game.Dialog.Help, Game.Dialog);
-//Game.Dialog.Help.extend(Game.Dialog);
 
 Game.Dialog.Help.prototype.getOutput = function() {
     var output = "Use arrow keys or numpad to move <br />";
@@ -156,11 +155,12 @@ Game.Dialog.WonGame = function() {
     Game.Dialog.call(this, properties);
 };
 extendObj(Game.Dialog.WonGame, Game.Dialog);
-//Game.Dialog.WonGame.extend(Game.Dialog);
 
 Game.Dialog.WonGame.prototype.getOutput = function() {
     var output = " <br />" ;
-    output += " You have won!<br />";
+    output += " You win! <br /> <br />";
+    output += " You have succeeded in bringing the Star Ruby to the surface.";
+    output += " The world now has a chance to survive!";
     output += " <br />";
     return output;
 };
@@ -176,7 +176,6 @@ Game.Dialog.LostGame = function() {
 };
 
 extendObj(Game.Dialog.LostGame, Game.Dialog);
-//Game.Dialog.LostGame.extend(Game.Dialog);
 
 Game.Dialog.LostGame.prototype.getOutput = function() {
     var output = " <br />" ;
@@ -203,7 +202,6 @@ Game.Dialog.Items = function(properties, items) {
 };
 
 extendObj(Game.Dialog.Items, Game.Dialog);
-//Game.Dialog.Items.extend(Game.Dialog);
 
 Game.Dialog.Items.prototype.getOutput = function() {
     var output = this.getItemOutput();
