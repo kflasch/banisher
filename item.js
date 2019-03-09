@@ -46,6 +46,8 @@ Game.ItemMixins.Drinkable = {
         if (entity.hasMixin('Effectable')) {
             entity.addEffect(this.type, this.value, this.duration);
         }
+        if (entity.hasMixin('PlayerActor'))
+            Game.UI.addMessage("You drink the  " + this._name + ".");
         entity.removeItem(invIndex);
     }
 };
@@ -55,12 +57,14 @@ Game.ItemMixins.Readable = {
     init: function(template) {
         this.type = template['type'] || 0;
         this.value = template['value'] || 1;
-        this.duration = template['duration'] || 10;
     },
     read: function(entity, invIndex) {
-        if (entity.hasMixin('Effectable')) {
-            entity.addEffect(this.type, this.value, this.duration);
+        if (entity.hasMixin('Killable')) {
+            entity._defenseValue = entity._defenseValue + this.value;
         }
+        if (entity.hasMixin('PlayerActor'))
+            Game.UI.addMessage("As you recite the words from the " + this._name +
+                               ", it crumbles to dust.");
         entity.removeItem(invIndex);
     }
 };
@@ -85,23 +89,25 @@ Game.ItemMixins.Equippable = {
 
 Game.ItemRepository = new Game.Repository('items', Game.Item);
 
-Game.ItemRepository.define('book', {
-    name: 'book',
+Game.ItemRepository.define('bookofwarding', {
+    name: 'book of warding',
     chr: '+',
     fg: 'brown',
-    desc: 'A worn leather-bound tome with strange symbols on the cover.',
-    foundIn: [],
+    type: 'warding',
+    value: 1,
+    desc: 'A worn leather-bound tome with strange symbols on the cover. It contains incantations to used to protect oneself.',
+    foundIn: ['Cavern'],
     mixins: [Game.ItemMixins.Readable]
 });
 
-Game.ItemRepository.define('defensepotion', {
-    name: 'potion of defense',
+Game.ItemRepository.define('refreshpotion', {
+    name: 'potion of refreshment',
     chr: '!',
     fg: 'blue',
-    type: 'defense',
-    duration: 10,
-    value: 4,
-    desc: 'A potion that will temporarily bolster your defense.',
+    type: 'refresh',
+    duration: -1,
+    value: 1,
+    desc: 'A potion that will refresh you, setting your cooldown back to 0.',
     foundIn: ['Cavern'],
     mixins: [Game.ItemMixins.Drinkable]
 });

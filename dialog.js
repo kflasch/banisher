@@ -323,6 +323,12 @@ Game.Dialog.Items.prototype.handleInputSub = function(inputType, inputData) {
                 this.hide();
                 Game.engine.unlock();
             }
+        } else if (inputData.keyCode === ROT.KEYS.VK_R) {
+            if (this._currentItem && this._currentItem.hasMixin('Readable')) {
+                this._currentItem.read(Game.player, this._currentItemIndex);
+                this.hide();
+                Game.engine.unlock();
+            }
         }
         Game.UI.update();
     }
@@ -362,6 +368,8 @@ Game.Dialog.Items.prototype.getActions = function(item, itemIndex) {
         output += " [<span style='color:cyan'>q</span>]uaff";
     if (item.hasMixin('Usable'))
         output += " [<span style='color:cyan'>u</span>]se";
+    if (item.hasMixin('Readable'))
+        output += " [<span style='color:cyan'>r</span>]ead";
     output += " [<span style='color:cyan'>d</span>]rop";
     return output;
 };

@@ -728,13 +728,18 @@ Game.EntityMixins.Effectable = {
         this._effects = [];
     },
     addEffect: function(type, value, duration) {
-        this._effects.push({type: type,
-                            value: value,
-                            duration: duration});
+        if (duration > 0) {
+            // temporary effects
+            this._effects.push({type: type,
+                                value: value,
+                                duration: duration});
+        }
         if (type === 'defense')
             this._defenseValue += value;
         else if (type === 'attack')
             this._attackValue += value;
+        else if (type === 'refresh')
+            this._banishCooldown = 0;
     },
     removeEffect: function(effect, index) {
         this._effects.splice(index, 1);
