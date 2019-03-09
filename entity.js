@@ -385,6 +385,7 @@ Game.EntityMixins.TaskActor = {
         }
     },
     castAoE: function() {
+        this._zone.colorTilesAround(this._x, this._y, 3);
         var entities = this._zone.getEntitiesAround(this._x, this._y, 3);
         for (var entity of entities) {
             this.attack(entity);
@@ -930,7 +931,7 @@ Game.EntityRepository.define('archon', {
     maxHP: 200,
     attackValue: 100,
     defenseValue: 100,
-    attackVerbs: ['judges', 'smites', 'sings'],
+    attackVerbs: ['judges', 'smites', 'gazes at'],
     tasks: ['castAoE', 'hunt'],
     foundIn: ['Cavern'],
     rating: 5,

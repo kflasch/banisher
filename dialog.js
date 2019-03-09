@@ -136,6 +136,8 @@ Game.Dialog.MainMenu.prototype.showAboutSubWin = function() {
     output += "</i>";
     output += "<br /> <br />";
     output += "Banisher plays similar to a traditional roguelike. <br />";
+    output += "Banish creatures to make your way further but beware -- it ";
+    output += "has consequences! <br /> <br />";
     output += "Press <span style='color:cyan'>?</span> during the game ";
     output += "for help!";
     elem.innerHTML = output;

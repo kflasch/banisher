@@ -6,7 +6,7 @@ Game.World = function() {
 };
 
 Game.World.prototype._init = function(player) {
-    var zone = new Game.Zone.Cavern(this._getNewTiles(), -1, 1);
+    var zone = new Game.Zone.Shrine(this._getNewTiles(), -1, 1);
     this._zones.push(zone);
     zone._id = 0;
 
@@ -49,6 +49,7 @@ Game.World.prototype.generateNewZone = function(name, fromZoneID) {
 //    newZone.addConnection(x, y, Game.Tile.stairUp, fromZoneID);
     return newID;
 };
+
 
 Game.World.prototype.exportToString = function() {
     function replacer(key, value) {

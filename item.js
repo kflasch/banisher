@@ -60,6 +60,7 @@ Game.ItemMixins.Readable = {
     },
     read: function(entity, invIndex) {
         if (entity.hasMixin('Killable')) {
+            if (ROT.RNG.getUniform() > 0.8) this.value++;
             entity._defenseValue = entity._defenseValue + this.value;
         }
         if (entity.hasMixin('PlayerActor'))

@@ -163,6 +163,17 @@ Game.Zone.prototype.getEntitiesAround = function(x, y, r) {
     return entities;
 };
 
+Game.Zone.prototype.colorTilesAround = function(x, y, r) {
+    for (var i=x-r; i<x+r; i++) {
+        for (var j=y-r; j<y+r; j++) {
+            if (i===x && j===y) continue; // dont add center
+            var tile = this.getTile(i, j);
+            if (tile._char === '.')
+                this.setTile(i, j, Game.Tile.burntFloor);
+        }
+    }
+};
+
 Game.Zone.prototype.addEntityAtRandomPosition = function(entity) {
     var pos = this.getEmptyRandomPosition();
     entity._x = pos.x;
@@ -323,23 +334,25 @@ Game.Zone.Shrine = function Shrine(tiles, fromZoneID, depth) {
     this._name = "Shrine";
 
     var map = new ROT.Map.Cellular(this._width, this._height, {
-        born: [5],
-        survive: [1, 2, 3]});
-    map.randomize(0.5);
-    map.create(); map.create(); map.create();
+        born: [4, 5, 6, 7],
+        survive: [2, 3, 4, 5]});
+    map.randomize(0.9);
+    for (var mi=0; mi<20; mi++) {
+        map.create();
+    }
     map.connect(function(x, y, value) {
          if (value === 1) {
             if (ROT.RNG.getUniform() < 0.05)
-                this._tiles[x][y] = Game.Tile.caveWall;
+                this._tiles[x][y] = Game.Tile.shrineWallBright;
             else if (ROT.RNG.getUniform() < 0.3)
-                this._tiles[x][y] = Game.Tile.caveWallAlt;
+                this._tiles[x][y] = Game.Tile.shrineWallAlt;
             else
-                this._tiles[x][y] = Game.Tile.caveWallDark;
+                this._tiles[x][y] = Game.Tile.shrineWall;
         } else {
             if (ROT.RNG.getUniform() < 0.3)
-                this._tiles[x][y] = Game.Tile.caveFloor;
+                this._tiles[x][y] = Game.Tile.shrineFloor;
             else
-                this._tiles[x][y] = Game.Tile.caveFloorAlt;
+                this._tiles[x][y] = Game.Tile.shrineFloorAlt;
         }
     }.bind(this));
 
