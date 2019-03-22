@@ -514,6 +514,9 @@ Game.EntityMixins.Banishable = {
             if (rating > 5) rating = 5;
             var newEntity = Game.EntityRepository.createRandom(rating);
             this._zone.addEntityAwayFrom(newEntity, agent._x, agent._y, 40);
+            return true;
+        } else {
+            return false;
         }
     },
     isProtected: function() {
@@ -778,10 +781,17 @@ Game.EntityMixins.Banisher = {
             Game.UI.addMessage("You cannot banish anything yet!");
             return false;
         }
-        Game.UI.addMessage("You attempt to banish the beings around you...");
+
+        var didBanish = false;
         for (var i=0; i<entities.length; i++) {
-            entities[i].attemptRemoval(this);
+            if (entities[i].attemptRemoval(this))
+                didBanish = true;
         }
+        if (didBanish)
+            Game.UI.addMessage("You banish the creatures around you!");
+        else
+            Game.UI.addMessage("You failed to banish anything around you!");
+
         this._banishesUsed++;        
         this.setBanishCooldown();
         return true;

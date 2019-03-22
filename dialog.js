@@ -62,7 +62,7 @@ Game.Dialog.Help = function() {
 extendObj(Game.Dialog.Help, Game.Dialog);
 
 Game.Dialog.Help.prototype.getOutput = function() {
-    var output = "Use arrow keys or numpad to move <br />";
+    var output = "Use arrow keys, numpad or vi keys to move <br />";
     output += "'x' banish <br />";
     output += "'g' to get / pick up <br />";
     output += "'d' to drop <br />";
