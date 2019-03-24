@@ -744,6 +744,8 @@ Game.EntityMixins.Effectable = {
             this._banishCooldown = 0;
         else if (type === 'farsight')
             this._sightRadius += value;
+        else if (type === 'truesight')
+            Game.seeAll = true;
     },
     removeEffect: function(effect, index) {
         this._effects.splice(index, 1);
@@ -751,6 +753,8 @@ Game.EntityMixins.Effectable = {
             this._defenseValue -= effect.value;
         else if (effect.type === 'farsight')
             this._sightRadius -= effect.value;
+        else if (effect.type === 'truesight')
+            Game.seeAll = false;
     },
     elapseEffects: function() {
         // traverse array in reverse because splice re-indexes

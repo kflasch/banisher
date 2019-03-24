@@ -14,7 +14,7 @@ var Game = {
     currentDialog: null,
     pendingDirInput: null,
     visibleEntities: [],
-    debug: false,
+    seeAll: false,
 
     init: function() {
         this.display = new ROT.Display({fontFamily:"droid sans mono, monospace",
@@ -105,11 +105,11 @@ var Game = {
         Game.visibleEntities = [];
         for (var x = topLeftX; x < topLeftX + Game.canvasWidth; x++) {
             for (var y = topLeftY; y < topLeftY + Game.canvasHeight; y++) {
-                if (this.zone.isExplored(x, y) || Game.debug) {
+                if (this.zone.isExplored(x, y) || Game.seeAll) {
                     var glyph = this.zone.getTile(x, y);
                     if (glyph !== Game.Tile.nullTile) {
                         var fg = glyph._darkfg;
-                        if (visCells[x + "," + y] || Game.debug) {
+                        if (visCells[x + "," + y] || Game.seeAll) {
                             var items = this.zone.getItemsAt(x, y);
                             if (items) 
                                 glyph = items[items.length - 1];
@@ -267,7 +267,7 @@ Game.handleInput = function(inputType, inputData) {
             //Game.UI.addMessage("Game saved.");
             return;
         } else if (inputData.keyCode === ROT.KEYS.VK_BACK_SLASH) {
-            //Game.debug = (Game.debug === false) ? true : false;
+            //Game.seeAll = (Game.seeAll === false) ? true : false;
             return;
         } else {
             return;

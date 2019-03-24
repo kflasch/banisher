@@ -321,7 +321,10 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
         this.addEntityAtRandomPosition(entity);
     }
 
-    for (i=0; i<8; i++) {
+    // add at least one of each of the more essential items
+    this.addItemAtRandomPosition(Game.ItemRepository.create('refreshpotion'));
+    this.addItemAtRandomPosition(Game.ItemRepository.create('bookofwarding'));
+    for (i=0; i<2; i++) {
         this.addItemAtRandomPosition(Game.ItemRepository.createRandom());
     }
     

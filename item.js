@@ -141,6 +141,18 @@ Game.ItemRepository.define('farsightpotion', {
     mixins: [Game.ItemMixins.Drinkable]
 });
 
+Game.ItemRepository.define('truesightpotion', {
+    name: 'potion of truesight',
+    chr: '!',
+    fg: 'yellow',
+    type: 'truesight',
+    duration: 5,
+    value: 10,
+    desc: 'A potion that will give you sight of the entire cavern for a brief moment.',
+    foundIn: ['Cavern'],
+    mixins: [Game.ItemMixins.Drinkable]
+});
+
 Game.ItemRepository.define('corpse', {
     name: 'corpse',
     chr: '%'
