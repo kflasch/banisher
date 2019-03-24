@@ -513,7 +513,7 @@ Game.EntityMixins.Banishable = {
             var rating = this._rating+1;
             if (rating > 5) rating = 5;
             var newEntity = Game.EntityRepository.createRandom(rating);
-            this._zone.addEntityAwayFrom(newEntity, agent._x, agent._y, 40);
+            this._zone.addEntityAwayFrom(newEntity, agent._x, agent._y, 25);
             return true;
         } else {
             return false;
