@@ -306,8 +306,9 @@ Game.Zone.Cavern = function Cavern(tiles, fromZoneID, depth) {
     var pos = this.getEmptyRandomPosition();
     this._tiles[pos.x][pos.y] = Game.Tile.stairUp;
     this._connections[pos.x+','+pos.y] = fromZoneID;
-    
-    pos = this.getEmptyRandomPosition();
+
+    // ensure stairs down aren't right next to up
+    pos = this.getEmptyRandomPositionAway(pos.x, pos.y, 20);
     this._tiles[pos.x][pos.y] = Game.Tile.stairDown;
     if (depth === 5)
         this._connections[pos.x+','+pos.y] = 'Shrine';
