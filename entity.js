@@ -792,8 +792,8 @@ Game.EntityMixins.Banisher = {
         else
             Game.UI.addMessage("You failed to banish anything around you!");
 
-        this._banishesUsed++;        
         this.setBanishCooldown();
+        this._banishesUsed++;
         return true;
     },
     setBanishCooldown: function() {
@@ -802,7 +802,7 @@ Game.EntityMixins.Banisher = {
         if (this.hasItem('star ruby')) {
             this._banishCooldown = 0;
         } else {
-            this._banishCooldown = 5 * this._banishesUsed;
+            this._banishCooldown = 5 * Math.pow(2, this._banishesUsed);
         }
     },
     elapseBanishCooldown: function() {
