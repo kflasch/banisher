@@ -1,8 +1,8 @@
 var Game = {
     canvasWidth: 80,
     canvasHeight: 24,
-    mapWidth: 100,
-    mapHeight: 30,
+    mapWidth: 80,
+    mapHeight: 24,
     display: null,
     engine: null,
     scheduler: null,
