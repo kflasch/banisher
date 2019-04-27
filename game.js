@@ -221,6 +221,7 @@ Game.handleInput = function(inputType, inputData) {
         if (inputData.keyCode in Game.keyMap) {
             var dir = ROT.DIRS[8][Game.keyMap[inputData.keyCode]];
             Game.movePlayer(dir[0], dir[1]);
+            inputData.preventDefault();
         } else if (inputData.keyCode === ROT.KEYS.VK_X) {
             // banish! if nothing done, don't spend a turn
             if (!Game.player.banish(Game.visibleEntities))
@@ -299,6 +300,7 @@ Game.handleDirInput = function(inputData) {
         var x = Game.player._x + dir[0];
         var y = Game.player._y + dir[1];
         Game.player.tryDoor(x, y, Game.zone);
+        inputData.preventDefault();
         return true;
     } else {
         // don't expend a turn, no action
